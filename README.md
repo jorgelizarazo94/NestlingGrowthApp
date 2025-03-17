@@ -1,6 +1,6 @@
                                                             Nestling Growth App
 
-  ![Nestling Growth App_logo](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/NGapp_log.png)
+<img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/master/Nestling_App/api/assets/NGapp_log.png" alt="Nestling Growth App" width="250px">
 
 Overview
 
