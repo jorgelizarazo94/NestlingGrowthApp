@@ -34,7 +34,7 @@ app.layout = html.Div([
     ),
 
     dcc.Store(id='stored-data'),
-
+# hi -
     dcc.Tabs([
         dcc.Tab(label='Weight Analysis *Análisis de Peso*', children=[
             html.Br(),
