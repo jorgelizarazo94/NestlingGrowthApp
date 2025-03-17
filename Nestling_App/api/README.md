@@ -1,4 +1,4 @@
-![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/assets/Logo.png)
+![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/Nestling_App/assets/Logo.png)
 
     Nestling Growth Analyzer 🐣📈
   
