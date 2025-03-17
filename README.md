@@ -1,6 +1,7 @@
                                                             Nestling Growth App
-
-<img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/master/Nestling_App/api/assets/NGapp_log.png" alt="Nestling Growth App" width="250px">
+<p align="center">
+      <img src="https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/NGapp_log.png" alt="Nestling Growth App" width="200px">
+    </p>
 
 
 Overview
