@@ -318,6 +318,7 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     df_clean = df[[day_col, wing_col, tarsus_col]].dropna()
 
     x_data = df_clean[day_col]
+    x_fit = np.linspace(x_data.min(), x_data.max(), 50)  # puedes reducir de 100 a 80
 
     combined_results = []
     fig = go.Figure()
@@ -332,7 +333,7 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
             "Von Bertalanffy": von_bertalanffy, "Extreme Value Function": evf
         }[model_name_w]
 
-        x_fit = np.linspace(x_data.min(), x_data.max(), 100)
+
         y_fit_wing = model_func_w(x_fit, *params_w)
 
 
@@ -392,4 +393,4 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
