@@ -32,6 +32,9 @@ app.layout = html.Div([
                              style={'backgroundColor': '#535AA6', 'color': 'white', 'borderRadius': '5px'}),
         multiple=False
     ),
+    html.Div(id='upload-status', style={'marginTop': '10px',
+                                        'color': 'green',
+                                        'fontWeight': 'bold'}),
 
     dcc.Store(id='stored-data'),
 # hi -
@@ -159,19 +162,19 @@ app.layout = html.Div([
     ]),
 ])
 
-# Callback para cargar datos y actualizar dropdowns en ambas pestañas
 @app.callback(
     [Output('stored-data', 'data'),
      Output('day-dropdown-weight', 'options'),
      Output('weight-dropdown', 'options'),
      Output('day-dropdown-wing', 'options'),
      Output('wing-dropdown', 'options'),
-     Output('tarsus-dropdown', 'options')],
+     Output('tarsus-dropdown', 'options'),
+     Output('upload-status', 'children')],
     Input('upload-data', 'contents'),
 )
 def load_data(contents):
     if not contents:
-        return None, [], [], [], [], []
+        return None, [], [], [], [], [], ""
 
     content_type, content_string = contents.split(',')
     decoded = io.BytesIO(base64.b64decode(content_string))
@@ -179,7 +182,7 @@ def load_data(contents):
 
     options = [{'label': col, 'value': col} for col in df.columns]
 
-    return df.to_json(date_format='iso', orient='split'), options, options, options, options, options
+    return df.to_json(date_format='iso', orient='split'), options, options, options, options, options, "✅ CSV uploaded successfully!"
 
 
 # Callback para análisis de peso
