@@ -392,5 +392,8 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     return fig, combined_results_df.to_dict('records')
 
 
-if __name__ == '__main__':
+def main():
     app.run_server(debug=False)
+
+if __name__ == '__main__':
+    main()
