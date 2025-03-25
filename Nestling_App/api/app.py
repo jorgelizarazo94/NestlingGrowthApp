@@ -270,7 +270,7 @@ def export_results(n_clicks, table_data):
 def export_graph(n_clicks, figure):
     if not figure:
         return dash.no_update
-    img_bytes = go.Figure(figure).to_image(format="png", scale=3)
+    img_bytes = go.Figure(figure).to_image(format="png", scale=2)
     return dcc.send_bytes(img_bytes, "graph_export.png")
 
 @app.callback(
@@ -318,7 +318,7 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     df_clean = df[[day_col, wing_col, tarsus_col]].dropna()
 
     x_data = df_clean[day_col]
-    x_fit = np.linspace(x_data.min(), x_data.max(), 50)  # puedes reducir de 100 a 80
+    x_fit = np.linspace(x_data.min(), x_data.max(), 30)  # puedes reducir de 100 a 80
 
     combined_results = []
     fig = go.Figure()
