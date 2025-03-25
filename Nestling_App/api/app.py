@@ -217,7 +217,7 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
         "Extreme Value Function": evf
     }[model_name]
 
-    x_fit = np.linspace(x_data.min(), x_data.max(), 100)
+    x_fit = np.linspace(x_data.min(), x_data.max(), 80)
     y_fit = model_func(x_fit, *best_params)
 
     fig = go.Figure()
