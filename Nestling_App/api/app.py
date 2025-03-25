@@ -185,7 +185,7 @@ def load_data(contents):
     return df.to_json(date_format='iso', orient='split'), options, options, options, options, options, "✅ CSV uploaded successfully!"
 
 
-# Callback para análisis de peso
+# Callback para análisis de peso #d
 # Callback para peso con tabla incluida y formato original
 @app.callback(
     [Output('weight-graph', 'figure'),
