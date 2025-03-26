@@ -90,4 +90,4 @@ For questions, suggestions or collaborations, feel free to:
 Email: jorge.lizarazo.b@gmail.com
 Open an issue: GitHub Issues
 
-![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/Logo.png)
+![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/logo.png)
