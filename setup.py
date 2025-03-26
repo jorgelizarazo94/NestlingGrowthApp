@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='nestling_growth_app',
     version='0.1.5',
-    packages=find_packages(),
+    packages=find_packages(include=['nestling_app', 'nestling_app.*']),
     include_package_data=True,
     install_requires=[
         'dash',
