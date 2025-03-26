@@ -393,7 +393,10 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
 
 
 def main():
-    app.run_server(debug=False)
+    try:
+        app.run(debug=False)
+    except AttributeError:
+        app.run_server(debug=False)
 
 if __name__ == '__main__':
     main()
