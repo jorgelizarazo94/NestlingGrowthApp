@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+setup.py
+nestling_growth_app.egg-info/PKG-INFO
+nestling_growth_app.egg-info/SOURCES.txt
+nestling_growth_app.egg-info/dependency_links.txt
+nestling_growth_app.egg-info/entry_points.txt
+nestling_growth_app.egg-info/requires.txt
+nestling_growth_app.egg-info/top_level.txt
