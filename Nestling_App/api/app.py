@@ -115,7 +115,7 @@ app.layout = html.Div([
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='tarsus-dropdown', style={'width': '50%', 'max-width': '400px'}),
 
-            html.Button("Analyze Wing & Tarsus *Analizar Ala y Tarso*",
+            html.Button("Analyze Wing & Tarsus *Analizar Ala y Tarso*", #f
                         id="analyze-wing-tarsus", n_clicks=0,
                         style={
                             'backgroundColor': '#535AA6',
