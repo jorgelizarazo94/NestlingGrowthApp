@@ -1,2 +1,0 @@
-[console_scripts]
-nestling-app = Nestling_App.api.app:main

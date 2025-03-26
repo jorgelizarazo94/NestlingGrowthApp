@@ -21,6 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'nestling-app = nestling_app.api.app:main'
-        ]
+        ],
     },
 )
