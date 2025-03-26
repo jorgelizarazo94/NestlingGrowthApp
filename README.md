@@ -4,8 +4,7 @@
 
 # 🐣 Nestling Growth App
 
-The **Nestling Growth App** is an interactive web application built with Dash, designed to analyze and visualize bird nestling growth data using multiple biological growth models, including:
-
+The Nestling Growth App is a web-based tool designed for ornithologists, ecologists, and researchers working on nestling development. It allows users to visualize and model growth metrics such as weight, wing, and tarsus length using classic biological growth functions.
 - Logistic  
 - Gompertz  
 - Richards  
@@ -27,11 +26,44 @@ This app is ideal for ecologists, ornithologists, and conservation biologists lo
 - **Weight Analysis**
 - **Wing & Tarsus Analysis**
 
+## Input Format
+The uploaded CSV should contain at least:
+A day column (e.g., Day, Age, Month)
+At least one of:
+- Weight
+- Wing
+- Tarsus
+
+## Output
+Graphs with observed and fitted curves
+A table comparing models by:
+- PNG graphs ready for publishing 300dpi
+- AIC/BIC
+- Parameters
+- Growth rate k
+- Inflection point T
+- ΔAIC
+
+## Examples
+
+You can access to the folder:
+[data](https://github.com/jorgelizarazo94/NestlingGrowthApp/tree/16d2ace118ba1caaf614fd3fb4572b6ded4d18ea/nestling_app/data)
+In order to have some previous data to test and learn from.
+
 ---
+# 📦 Installation
 
-## ⚙️ How to Install & Run
+You can install the app globally via pip:
 
-### ✅ Option 1: One-Line Install (recommended)
+```bash
+pip install nestling-growth-app
+```
+Once installed, run it with:
+```
+nestling-app
+```
+
+### ✅ Option 2: One-Line Install (recommended)
 
 Just open your terminal (or Anaconda Prompt) and run:
 
@@ -46,7 +78,7 @@ nestling-app
 ```
 It will open on: http://localhost:8050
 
-## Option 2: Install in a Conda Environment (clean setup)
+## Option 3: Install in a Conda Environment (clean setup)
 
 ```
 conda create -n nestlings python=3.9 -y
@@ -55,7 +87,7 @@ pip install git+https://github.com/jorgelizarazo94/NestlingGrowthApp.git
 nestling-app
 ```
 
-## Option 3: Clone the Repo and Run (for development)
+## Option 4: Clone the Repo and Run (for development)
 ```
 git clone https://github.com/jorgelizarazo94/NestlingGrowthApp.git
 cd NestlingGrowthApp
