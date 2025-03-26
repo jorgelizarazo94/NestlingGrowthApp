@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/NGapp_log.png" alt="Nestling Growth App" width="200px">
+  <img src="https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/ngapp_log.png" alt="Nestling Growth App" width="200px">
 </p>
 
 # 🐣 Nestling Growth App
