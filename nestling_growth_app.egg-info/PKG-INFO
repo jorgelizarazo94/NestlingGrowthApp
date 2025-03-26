@@ -1,12 +1,6 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.1
 Name: nestling-growth-app
 Version: 0.1.5
-Summary: Dash app for analyzing nestling growth with logistic and non-linear models.
-Author: Jorge Lizarazo
-Classifier: Programming Language :: Python :: 3
-Classifier: Framework :: Dash
-Classifier: Operating System :: OS Independent
-Requires-Python: >=3.7
 Requires-Dist: dash
 Requires-Dist: pandas
 Requires-Dist: numpy
@@ -17,8 +11,3 @@ Requires-Dist: fastapi
 Requires-Dist: uvicorn
 Requires-Dist: kaleido
 Requires-Dist: gunicorn
-Dynamic: author
-Dynamic: classifier
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
