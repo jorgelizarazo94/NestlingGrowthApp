@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jorgelizarazo94/nestling_app/api/assets/ngapp_log.png" alt="Nestling Growth App" width="200px">
+    <img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/ngapp_log.png" alt="Nestling Growth App" width="200px">
 </p>
 
 # 🐣 Nestling Growth App
@@ -90,4 +90,6 @@ For questions, suggestions or collaborations, feel free to:
 Email: jorge.lizarazo.b@gmail.com
 Open an issue: GitHub Issues
 
-![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/logo.png)
+
+
+![Nestling Growth App](https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/logo.png)
