@@ -1,4 +1,3 @@
-                                                            Nestling Growth App
 <p align="center">
   <img src="https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/NGapp_log.png" alt="Nestling Growth App" width="200px">
 </p>
@@ -17,65 +16,72 @@ This app is ideal for ecologists, ornithologists, and conservation biologists lo
 
 ---
 
-## Features
+## ✨ Features
 
 ✔ Upload CSV files with growth data  
 ✔ Select variables dynamically (e.g., weight, wing, tarsus)  
 ✔ Automatically fit multiple growth models and visualize the best fit  
 ✔ Export graphs and model results in CSV and PNG formats  
 ✔ Interactive UI powered by Dash and Plotly  
-✔ Dual-tab layout for:
+✔ Dual-tab layout:
 - **Weight Analysis**
 - **Wing & Tarsus Analysis**
 
 ---
 
-## Installation & Setup
+## ⚙️ How to Install & Run
 
-### Option 1: Run Manually (Development Mode)
+### ✅ Option 1: One-Line Install (recommended)
 
-```bash
-git clone https://github.com/jorgelizarazo94/NestlingGrowthApp.git
-cd NestlingGrowthApp
-pip install -r Nestling_App/api/requirements.txt
-python Nestling_App/api/app.py
-
-```
-
-# Option 2: Install as a Python Package (from setup.py)
-
-This lets you run the app from the command line using nestling-app
+Just open your terminal (or Anaconda Prompt) and run:
 
 ```bash
-git clone https://github.com/jorgelizarazo94/NestlingGrowthApp.git
-cd NestlingGrowthApp
-pip install .
+pip install git+https://github.com/jorgelizarazo94/NestlingGrowthApp.git
+
 ```
 Then launch the app with:
+```
+nestling-app
 
-```bash
+```
+It will open on: http://localhost:8050
+
+## Option 2: Install in a Conda Environment (clean setup)
+
+```
+conda create -n nestlings python=3.9 -y
+conda activate nestlings
+pip install git+https://github.com/jorgelizarazo94/NestlingGrowthApp.git
 nestling-app
 ```
 
-# 🌐 Live Deployment
+## Option 3: Clone the Repo and Run (for development)
+```
+git clone https://github.com/jorgelizarazo94/NestlingGrowthApp.git
+cd NestlingGrowthApp
+pip install -e .
+nestling-app
 
-You can access the live app here:
+```
+
+# 🌐 Live Deployment
+If deployed on Render you can access the live app here::
 [Nestling Growth App (if available)](https://nestling-growth-app.onrender.com)
 
-# 📁 Project Structure
 
+# 📁 Project Structure
 ```
 NestlingGrowthApp/
 │
 ├── Nestling_App/
 │   ├── api/
-│   │   ├── app.py                # Main Dash app
-│   │   ├── assets/               # Images and logo
-│   │   ├── requirements.txt      # All dependencies
+│   │   ├── app.py              # Main Dash app
+│   │   ├── assets/             # Images and logo
+│   │   ├── __init__.py
 │   ├── models/
-│   │   └── growth_models.py      # Growth model definitions
-│   ├── components/
-│   └── setup.py                 # Setup for pip installation
+│   │   └── growth_models.py    # Growth model definitions
+│   ├── setup.py                # Installer file for pip
+├── requirements.txt
 ├── README.md
 ```
 
@@ -83,6 +89,5 @@ NestlingGrowthApp/
 For questions, suggestions or collaborations, feel free to:
 Email: jorge.lizarazo.b@gmail.com
 Open an issue: GitHub Issues
-
 
 ![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/Logo.png)
