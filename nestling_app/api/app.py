@@ -20,7 +20,7 @@ server = app.server
 app.layout = html.Div([
 
     html.Div([
-        html.Img(src="/assets/Logo.png",
+        html.Img(src="assets/logo.png",
                  style={'height': '60px', 'margin-top': '30px', 'margin-left': '20px'}),
         html.Img(src="/assets/nestlings.jpg",
                  style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'})
