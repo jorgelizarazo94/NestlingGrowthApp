@@ -209,12 +209,8 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
     x_data = df_clean[day_col]
     y_data = df_clean[weight_col]
 
-    if x_data.isnull().any() or y_data.isnull().any():
-        print("⚠️ Hay valores nulos en las columnas seleccionadas.")
-        return go.Figure(), []
-
-    if len(df) < 3:
-        print(f"⚠️ No hay suficientes datos. Solo {len(df)} filas.")
+    if len(df_clean) < 3:
+        print(f"⚠️ No hay suficientes datos. Solo {len(df_clean)} filas.")
         return go.Figure(), []
 
     best_model, results = fit_models(x_data, y_data)
@@ -237,19 +233,19 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x_data, y=y_data, mode='markers',
-        marker=dict(size=6, color='gray', opacity=0.7),  # ✅ Color gris original
+        marker=dict(size=6, color='gray', opacity=0.7),
         name="Observed Data"
     ))
-
     fig.add_trace(go.Scatter(
         x=x_fit, y=y_fit, mode='lines',
-        line=dict(color='black', width=2),  # ✅ Línea negra original
+        line=dict(color='black', width=2),
         name="Trend"
     ))
 
-    # ✅ Restaurar estilo original solicitado por usuario
+    tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
+
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=1),
+        xaxis=dict(tickmode='linear', dtick=tick_spacing),
         xaxis_title="Days After Hatching",
         yaxis_title="Weight",
         template="simple_white",
@@ -395,8 +391,10 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     combined_results_df["Parámetros"] = combined_results_df["Parámetros"].astype(str)
 
     # Estilo gráfico final
+    tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
+
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=1, title="Days After Hatching"),
+        xaxis=dict(tickmode='linear', dtick=tick_spacing, title="Days After Hatching"),
         yaxis_title="Measurement",
         template="simple_white",
         font=dict(size=14, color="black"),
