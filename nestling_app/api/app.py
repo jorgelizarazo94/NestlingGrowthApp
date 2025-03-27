@@ -242,8 +242,10 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
         name="Trend"
     ))
 
+    tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
+
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=1),
+        xaxis=dict(tickmode='linear', dtick=tick_spacing),
         xaxis_title="Days After Hatching",
         yaxis_title="Weight",
         template="simple_white",
@@ -389,8 +391,10 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     combined_results_df["Parámetros"] = combined_results_df["Parámetros"].astype(str)
 
     # Estilo gráfico final
+    tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
+
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=1, title="Days After Hatching"),
+        xaxis=dict(tickmode='linear', dtick=tick_spacing, title="Days After Hatching"),
         yaxis_title="Measurement",
         template="simple_white",
         font=dict(size=14, color="black"),
