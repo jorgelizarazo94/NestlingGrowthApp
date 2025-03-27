@@ -200,8 +200,14 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
         return go.Figure(), []
 
     df = pd.read_json(json_data, orient='split')
-    x_data = df[day_col]
-    y_data = df[weight_col]
+    df_clean = df[[day_col, weight_col]].dropna()
+
+    if df_clean.empty:
+        print("⚠️ Dataset is empty after removing NaNs.")
+        return go.Figure(), []
+
+    x_data = df_clean[day_col]
+    y_data = df_clean[weight_col]
 
     if x_data.isnull().any() or y_data.isnull().any():
         print("⚠️ Hay valores nulos en las columnas seleccionadas.")
