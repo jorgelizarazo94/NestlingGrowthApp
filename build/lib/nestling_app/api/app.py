@@ -280,7 +280,7 @@ def export_results(n_clicks, table_data):
 def export_graph(n_clicks, figure):
     if not figure:
         return dash.no_update
-    img_bytes = go.Figure(figure).to_image(format="png", scale=2)
+    img_bytes = go.Figure(figure).to_image(format="png", scale=3)
     return dcc.send_bytes(img_bytes, "graph_export.png")
 
 @app.callback(
