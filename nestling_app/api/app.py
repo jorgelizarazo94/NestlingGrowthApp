@@ -203,6 +203,14 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
     x_data = df[day_col]
     y_data = df[weight_col]
 
+    if x_data.isnull().any() or y_data.isnull().any():
+        print("⚠️ Hay valores nulos en las columnas seleccionadas.")
+        return go.Figure(), []
+
+    if len(df) < 3:
+        print(f"⚠️ No hay suficientes datos. Solo {len(df)} filas.")
+        return go.Figure(), []
+
     best_model, results = fit_models(x_data, y_data)
 
     if best_model is None:

@@ -47,44 +47,42 @@ def fit_models(x_data, y_data):
     }
 
     results = []
+    print("📦 Starting model fitting...")
 
     for model_name, (model_func, initial_params) in models.items():
         try:
+            print(f"🔍 Trying model: {model_name}")
             popt, _ = curve_fit(model_func, x_data, y_data, p0=initial_params, maxfev=10000)
             y_pred = model_func(x_data, *popt)
             aic, bic = calculate_aic_bic(y_data, y_pred, popt)
 
-            # 📌 Calculate Growth Rate (`k`) and Inflection Point (`T`)
+            # Growth rate and inflection point
             if model_name == "Logistic":
-                k_value = popt[1]
-                T_value = popt[2]
+                k_value, T_value = popt[1], popt[2]
             elif model_name == "Gompertz":
-                k_value = popt[2]
-                T_value = np.log(popt[1]) / popt[2]
+                k_value, T_value = popt[2], np.log(popt[1]) / popt[2]
             elif model_name == "Richards":
-                k_value = popt[1]
-                T_value = popt[2]
+                k_value, T_value = popt[1], popt[2]
             elif model_name == "Von Bertalanffy":
-                k_value = popt[1]
-                T_value = popt[2]
+                k_value, T_value = popt[1], popt[2]
             elif model_name == "Extreme Value Function":
-                k_value = popt[2]
-                T_value = np.log(popt[1]) / popt[2]
+                k_value, T_value = popt[2], np.log(popt[1]) / popt[2]
             else:
                 k_value, T_value = None, None
 
             results.append((model_name, popt, aic, bic, k_value, T_value))
-        except:
-            pass
+            print(f"✅ Success: {model_name} — AIC: {aic:.2f}, k: {k_value:.4f}, T: {T_value:.2f}")
+
+        except Exception as e:
+            print(f"❌ Error with {model_name}: {e}")
 
     if not results:
+        print("🚫 No models could be fitted.")
         return None, None
 
-    # Sort by AIC and Compute ΔAIC
     results.sort(key=lambda x: x[2])
     best_aic = results[0][2]
     results = [(m, p, aic, bic, k, T, aic - best_aic) for (m, p, aic, bic, k, T) in results]
 
-    # Select Best Model
-    best_model = results[0]
-    return best_model, results
+    print(f"🏆 Best model: {results[0][0]} with ΔAIC = 0.0")
+    return results[0], results

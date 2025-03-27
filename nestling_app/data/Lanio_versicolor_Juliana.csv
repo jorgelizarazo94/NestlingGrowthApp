@@ -1,0 +1,14 @@
+﻿Familia,Especie,ID_del_Nido,Elevacion,Fecha_de_medición,Polluelo_Edad_dias,Polluelo_Masa_g,Polluelo_Tarso_mm,Polluelo_Ala_mm,Estacion
+Thraupidae,Lanio_versicolor,P06_JPV11,400,8-Sep-11,0,1.54,6.9,5.6,Pantiacolla
+Thraupidae,Lanio_versicolor,P06_JPV11,400,9-Sep-11,1,2.05,6.6,5.1,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,1-Nov-11,7,13.22,14,33.4,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,2-Nov-11,8,15.4,15.5,41,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,26-Oct-11,1,2.39,6.8,6.7,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,27-Oct-11,2,3.87,7.7,7.6,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,29-Oct-11,4,10.6,15.1,14.6,Pantiacolla
+Thraupidae,Lanio_versicolor,P29_SDR11,535,4-Nov-11,10,15.63,16.2,48.9,Pantiacolla
+Thraupidae,Lanio_versicolor,P94_MASM12,415,19-Nov-12,3,4.6,10,8.5,Pantiacolla
+Thraupidae,Lanio_versicolor,P94_MASM12,415,21-Nov-12,5,8,12.5,15.6,Pantiacolla
+Thraupidae,Lanio_versicolor,P94_MASM12,415,23-Nov-12,7,11.7,15.6,28,Pantiacolla
+Thraupidae,Lanio_versicolor,P94_MASM12,415,26-Nov-12,10,14.85,18.5,43,Pantiacolla
+Thraupidae,Lanio_versicolor,P94_MASM12,415,28-Nov-12,12,15.45,19,51.1,Pantiacolla
