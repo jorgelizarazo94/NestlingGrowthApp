@@ -4,124 +4,137 @@
 
 # 🐣 Nestling Growth App
 
-The Nestling Growth App is a web-based tool designed for ornithologists, ecologists, and researchers working on nestling development. It allows users to visualize and model growth metrics such as weight, wing, and tarsus length using classic biological growth functions.
+The Nestling Growth App is a web-based tool designed for ornithologists, ecologists, and researchers working on nestling development. It allows users to visualize and model growth metrics such as weight, wing, and tarsus length using classic biological growth functions:
 - Logistic  
 - Gompertz  
 - Richards  
 - Von Bertalanffy  
 - Extreme Value Function (EVF)  
 
-This app is ideal for ecologists, ornithologists, and conservation biologists looking to model nestling growth patterns, compare model performance using AIC/BIC, and export results seamlessly.
+It includes language support (English, Spanish, Portuguese) and dynamic content based on user selection.
 
 ---
 
 ## ✨ Features
 
-✔ Upload CSV files with growth data  
-✔ Select variables dynamically (e.g., weight, wing, tarsus)  
-✔ Automatically fit multiple growth models and visualize the best fit  
-✔ Export graphs and model results in CSV and PNG formats  
-✔ Interactive UI powered by Dash and Plotly  
-✔ Dual-tab layout:
-- **Weight Analysis**
-- **Wing & Tarsus Analysis**
-
-## Input Format
-The uploaded CSV should contain at least:
-A day column (e.g., Day, Age, Month)
-At least one of:
-- Weight
-- Wing
-- Tarsus
-
-## Output
-Graphs with observed and fitted curves
-A table comparing models by:
-- PNG graphs ready for publishing 300dpi
-- AIC/BIC
-- Parameters
-- Growth rate k
-- Inflection point T
-- ΔAIC
-
-## Examples
-
-You can access to the folder:
-[data](https://github.com/jorgelizarazo94/NestlingGrowthApp/tree/d910ec6f4befb22dc730157e6a9bd1a66e7de863/nestling_app/data)
-In order to have some previous data to test and learn from.
+✔ Upload your own CSV with growth data  
+✔ Dynamically select variables (e.g., weight, wing, tarsus)  
+✔ Automatically fits multiple growth models  
+✔ Exports results (tables and graphs) as CSV and PNG  
+✔ Interactive interface with tabs for **Weight** and **Wing & Tarsus**  
+✔ Multilingual: 🇬🇧 English, 🇪🇸 Español, 🇵🇹 Português  
 
 ---
-# 📦 Installation
 
-You can install the app globally via pip:
+## 📥 Input Format
+
+Your CSV must include:
+- A column for day (e.g., `Day`, `Age`, `Día`, etc.)
+- At least one of the following: `Weight`, `Wing`, or `Tarsus`
+
+---
+
+## 📤 Output
+
+- Growth curves with fitted models  
+- AIC/BIC comparison tables  
+- Model parameters including k and T  
+- Exportable graphs (PNG, 300dpi) and results table (CSV)  
+
+---
+
+## 📦 Installation (One Time Setup)
+
+Just install once using one of the following methods. After that, you can launch the app anytime by running:
+
+```
+nestling-app
+```
+
+### ✅ Option 1: PyPI (recommended)
 
 ```bash
 pip install nestling-growth-app
 ```
-Once installed, run it with:
-```
-nestling-app
-```
 
-### ✅ Option 2: One-Line Install (recommended)
-
-Just open your terminal (or Anaconda Prompt) and run:
+### ✅ Option 2: Install directly from GitHub
 
 ```bash
 pip install git+https://github.com/jorgelizarazo94/NestlingGrowthApp.git
-
 ```
-Then launch the app with:
-```
-nestling-app
 
-```
-It will open on: http://localhost:8050
+### 🧪 Option 3: Conda environment (clean setup)
 
-## Option 3: Install in a Conda Environment (clean setup)
-
-```
+```bash
 conda create -n nestlings python=3.9 -y
 conda activate nestlings
 pip install git+https://github.com/jorgelizarazo94/NestlingGrowthApp.git
-nestling-app
 ```
 
-## Option 4: Clone the Repo and Run (for development)
-```
+### 🧑‍💻 Option 4: Clone the repository
+
+```bash
 git clone https://github.com/jorgelizarazo94/NestlingGrowthApp.git
 cd NestlingGrowthApp
 pip install -e .
-nestling-app
-
 ```
 
-# 🌐 Live Deployment
-If deployed on Render you can access the live app here::
-[Nestling Growth App (if available)](https://nestling-growth-app.onrender.com)
+Then launch the app with:
 
+```
+nestling-app
+```
 
-# 📁 Project Structure
+Once started, the app will open automatically or can be accessed via:  
+[http://localhost:8050](http://localhost:8050)
+
+---
+
+## 🌐 Live Deployment
+
+You can try the online version (if available) here:  
+🔗 [Nestling Growth App on Render](https://nestling-growth-app.onrender.com)
+
+---
+
+## 🗂️ Folder Structure
+
 ```
 NestlingGrowthApp/
 │
-├── Nestling_App/
+├── nestling_app/
 │   ├── api/
 │   │   ├── app.py              # Main Dash app
-│   │   ├── assets/             # Images and logo
-│   │   ├── __init__.py
+│   │   ├── translations.py     # Multilingual content
+│   │   └── assets/             # Images and logo
 │   ├── models/
-│   │   └── growth_models.py    # Growth model definitions
-│   ├── setup.py                # Installer file for pip
-├── requirements.txt
+│   │   └── growth_models.py    # Growth models
+│   ├── components/             # (Optional) Modular UI parts
+│   ├── data/                   # Example datasets
+├── setup.py
 ├── README.md
+├── requirements.txt
 ```
 
-# **Contact**
-For questions, suggestions or collaborations, feel free to:
-Email: jorge.lizarazo.b@gmail.com
-Open an issue: GitHub Issues
+---
 
+## 📊 Example Datasets
 
+Sample data for testing is available here:  
+[📁 Sample Data Folder](https://github.com/jorgelizarazo94/NestlingGrowthApp/tree/d910ec6f4befb22dc730157e6a9bd1a66e7de863/nestling_app/data)
 
-![Nestling Growth App](https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/logo.png)
+---
+
+## 📬 Contact
+
+For questions, suggestions, or collaborations:  
+📧 jorge.lizarazo.b@gmail.com  
+🐛 [GitHub Issues](https://github.com/jorgelizarazo94/NestlingGrowthApp/issues)
+
+---
+
+<p align="center">
+  <a href="https://wildlabs.net/" target="_blank">
+    <img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/logo.png" width="350px" />
+  </a>
+</p>

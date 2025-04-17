@@ -7,6 +7,7 @@ nestling_app/__init__.py
 nestling_app/api/__init__.py
 nestling_app/api/app.py
 nestling_app/api/graph_export.png
+nestling_app/api/translations.py
 nestling_app/api/assets/logo.png
 nestling_app/api/assets/nestlings.jpg
 nestling_app/api/assets/ngapp_log.png
