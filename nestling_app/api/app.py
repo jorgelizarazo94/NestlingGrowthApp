@@ -3,7 +3,7 @@ from dash import dcc, html, Input, Output, State, dash_table
 import pandas as pd
 import io
 import base64
-
+from nestling_app.api.translations import translations
 import kaleido
 import plotly.graph_objects as go
 import numpy as np
@@ -26,36 +26,51 @@ app.layout = html.Div([
                  style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'})
     ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
 
+html.Div([
+    html.Label("🌍 Language / Idioma / Língua:", style={'margin-left': '20px'}),
+    dcc.Dropdown(
+        id='language-selector',
+        options=[
+            {'label': '🇬🇧 English', 'value': 'en'},
+            {'label': '🇪🇸 Español', 'value': 'es'},
+            {'label': '🇵🇹 Português', 'value': 'pt'}
+        ],
+        value='es',
+        clearable=False,
+        style={'width': '200px', 'margin': '10px 0 30px 20px'}
+    ),
+    dcc.Store(id='selected-language', data='es')
+]),
+
     dcc.Upload(
         id='upload-data',
         children=html.Button('📂 Upload CSV File *Subir Archivo CSV*',
                              style={'backgroundColor': '#535AA6', 'color': 'white', 'borderRadius': '5px'}),
         multiple=False
     ),
-    html.Div(id='upload-status', style={'marginTop': '10px',
+    html.Div(id='upload-button-placeholder', style={'marginTop': '10px',
                                         'color': 'green',
                                         'fontWeight': 'bold'}),
 
     dcc.Store(id='stored-data'),
 # hi -
     dcc.Tabs([
-        dcc.Tab(label='Weight Analysis *Análisis de Peso*', children=[
+        dcc.Tab(id='tab-weight', children=[
             html.Br(),
 
-            html.Label("Select Day Column *Seleccionar Día*:",
+            html.Label(id="label-select-day-weight",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='day-dropdown-weight', placeholder="Select a column for Day",
                          style={'width': '50%', 'max-width': '400px'}),
 
-            html.Label("Select Weight Column *Seleccionar Peso*:",
+            html.Label(id="label-select-weight",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6', 'margin-top': '20px'}),
             dcc.Dropdown(id='weight-dropdown', placeholder="Select a column for Weight",
                          style={'width': '50%', 'max-width': '400px'}),
 
             html.Br(),
             # Primer botón (Weight Analysis)
-            html.Button("Analyze Weight *Analizar Peso*",
-                        id="analyze-weight", n_clicks=0,
+            html.Button(id="analyze-weight", n_clicks=0,
                         style={
                             'backgroundColor': '#535AA6',
                             'color': 'white',
@@ -69,12 +84,12 @@ app.layout = html.Div([
 
             dcc.Graph(id='weight-graph'),
 
-            html.Button("📤 Export Graph *Exportar Gráfica*", id="export-graph-button", n_clicks=0,
+            html.Button( id="export-graph-button", n_clicks=0,
                         style={'backgroundColor': '#E28342', 'color': 'white', 'borderRadius': '5px',
                                'padding': '8px'}),
             dcc.Download(id="download-graph"),
 
-            html.H3("Model Results *Resultados de Modelos*", style={'textAlign': 'center', 'color': '#2E86C1'}),
+            html.H3(id="h3-model-results", style={'textAlign': 'center', 'color': '#2E86C1'}),
 
             dash_table.DataTable(
                 id='model-results-table',
@@ -95,28 +110,27 @@ app.layout = html.Div([
             ),
 
             html.Br(),
-            html.Button("📥 Export Results *Exportar Resultados*", id="export-button", n_clicks=0,
+            html.Button( id="export-button", n_clicks=0,
                         style={'backgroundColor': '#E28342', 'color': 'white', 'borderRadius': '5px',
                                'padding': '10px'}),
             dcc.Download(id="download-dataframe-csv")
         ]),
 
-        dcc.Tab(label='Wing & Tarsus Analysis *Análisis Ala y Tarso*', children=[
+        dcc.Tab(id='tab-wing', label='tab-wing', children=[
             html.Br(),
-            html.Label("Select Day Column *Seleccionar Dia*:",
+            html.Label(id="label-select-day-wing",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='day-dropdown-wing', style={'width': '50%', 'max-width': '400px'}), #535AA6
 
-            html.Label("Select Wing Column *Ala*:",
+            html.Label(id="label-select-wing",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='wing-dropdown', style={'width': '50%', 'max-width': '400px'}),
 
-            html.Label("Select Tarsus Column *Tarso*:",
+            html.Label(id="label-select-tarsus",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='tarsus-dropdown', style={'width': '50%', 'max-width': '400px'}),
 
-            html.Button("Analyze Wing & Tarsus *Analizar Ala y Tarso*", #f
-                        id="analyze-wing-tarsus", n_clicks=0,
+            html.Button(id="analyze-wing-tarsus", n_clicks=0,
                         style={
                             'backgroundColor': '#535AA6',
                             'color': 'white',
@@ -128,12 +142,12 @@ app.layout = html.Div([
 
             dcc.Graph(id='wing-graph'),
 
-            html.Button("📤 Export Graph Wing & Tarsus *Exportar Gráfica Ala y Tarso*",
+            html.Button(
             id="export-graph-wing-tarsus-button", n_clicks=0,
             style={'backgroundColor': '#E28342', 'color': 'white', 'borderRadius': '5px', 'padding': '8px'}),
             dcc.Download(id="download-graph-wing-tarsus"),
 
-            html.H3("Model Results Wing & Tarsus *Resultado Modelo Alas & Tarso", style={'textAlign': 'center', 'color': '#535AA6'}),
+            html.H3(id="h3-model-results-wing", style={'textAlign': 'center', 'color': '#535AA6'}),
 
             dash_table.DataTable(
                 id='model-results-table-wing-tarsus',
@@ -155,12 +169,13 @@ app.layout = html.Div([
             ),
 
             html.Br(),
-            html.Button("📥 Export Results Ala y Tarso", id="export-wing-tarsus-button",
+            html.Button(id="export-wing-tarsus-button",
                         style={'backgroundColor': '#E28342', 'color': 'white', 'padding': '8px'}),
             dcc.Download(id="download-wing-tarsus-csv")
         ]),
     ]),
 ])
+
 
 @app.callback(
     [Output('stored-data', 'data'),
@@ -169,10 +184,11 @@ app.layout = html.Div([
      Output('day-dropdown-wing', 'options'),
      Output('wing-dropdown', 'options'),
      Output('tarsus-dropdown', 'options'),
-     Output('upload-status', 'children')],
-    Input('upload-data', 'contents'),
+     Output('upload-button-placeholder', 'children')],
+    [Input('upload-data', 'contents'),
+     State('selected-language', 'data')]
 )
-def load_data(contents):
+def load_data(contents, lang):
     if not contents:
         return None, [], [], [], [], [], ""
 
@@ -181,9 +197,25 @@ def load_data(contents):
     df = pd.read_csv(decoded)
 
     options = [{'label': col, 'value': col} for col in df.columns]
+    message = translations[lang]['upload_success']
 
-    return df.to_json(date_format='iso', orient='split'), options, options, options, options, options, "✅ CSV uploaded successfully!"
+    return (
+        df.to_json(date_format='iso', orient='split'),
+        options,
+        options,
+        options,
+        options,
+        options,
+        message
+    )
 
+@app.callback(
+    Output('h3-model-results-wing', 'children'),
+    Input('selected-language', 'data')
+)
+def update_model_results_wing_title(lang):
+    t = translations[lang]
+    return t.get('model_results_wing', 'Model Results Wing & Tarsus')
 
 # Callback para análisis de peso #d
 # Callback para peso con tabla incluida y formato original
@@ -295,6 +327,15 @@ def export_graph_wing_tarsus(n_clicks, figure):
     img_bytes = go.Figure(figure).to_image(format="png", scale=3)
     return dcc.send_bytes(img_bytes, "wing_tarsus_graph.png")
 
+@app.callback(
+    [Output('tab-weight', 'label'),
+     Output('tab-wing', 'label')],
+    Input('selected-language', 'data')
+)
+def update_tab_labels(lang):
+    t = translations[lang]
+    return t['weight_tab'], t['wing_tab']
+
 
 # Callback para análisis de ala y tarso
 @app.callback(
@@ -310,6 +351,31 @@ def export_wing_tarsus_results(n_clicks, data):
     return dcc.send_data_frame(df.to_csv, "wing_tarsus_results.csv", index=False)
 
 
+
+@app.callback(
+    [Output('analyze-weight', 'children'),
+     Output('upload-data', 'children'),
+     Output('analyze-wing-tarsus', 'children')],
+    Input('selected-language', 'data')
+)
+def update_labels(lang):
+    t = translations[lang]
+    return (
+        t['analyze_weight'],
+        html.Button(t['upload_btn'], style={
+            'backgroundColor': '#535AA6', 'color': 'white', 'borderRadius': '5px'
+        }),
+        t['analyze_wing_tarsus']
+    )
+
+@app.callback(
+    Output('h3-model-results', 'children'),
+    Input('selected-language', 'data')
+)
+def update_model_results_title(lang):
+    t = translations[lang]
+    return t.get('model_results', 'Model Results')
+
 @app.callback(
     [Output('wing-graph', 'figure'),
      Output('model-results-table-wing-tarsus', 'data')],
@@ -320,6 +386,7 @@ def export_wing_tarsus_results(n_clicks, data):
      State('stored-data', 'data')],
     prevent_initial_call=True
 )
+
 def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     if json_data is None:
         return go.Figure(), []
@@ -402,6 +469,31 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     )
 
     return fig, combined_results_df.to_dict('records')
+
+@app.callback(
+    Output('selected-language', 'data'),
+    Input('language-selector', 'value')
+)
+def store_language(lang_value):
+    return lang_value
+
+@app.callback(
+    [Output('label-select-day-weight', 'children'),
+     Output('label-select-weight', 'children'),
+     Output('label-select-day-wing', 'children'),
+     Output('label-select-wing', 'children'),
+     Output('label-select-tarsus', 'children')],
+    Input('selected-language', 'data')
+)
+def update_dropdown_labels(lang):
+    t = translations[lang]
+    return (
+        t.get('select_day', 'Select Day Column'),
+        t.get('select_weight', 'Select Weight Column'),
+        t.get('select_day', 'Select Day Column'),  # usado también en tab-wing
+        t.get('select_wing', 'Select Wing Column'),
+        t.get('select_tarsus', 'Select Tarsus Column')
+    )
 
 
 def main():
