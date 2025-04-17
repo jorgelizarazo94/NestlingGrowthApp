@@ -135,6 +135,6 @@ For questions, suggestions, or collaborations:
 
 <p align="center">
   <a href="https://wildlabs.net/" target="_blank">
-    <img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/logo.png" width="500px" />
+    <img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/logo.png" width="800px" />
   </a>
 </p>
