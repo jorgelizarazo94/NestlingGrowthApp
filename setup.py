@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='nestling_growth_app',
-    version='0.1.7',
+    version='0.1.8',
     packages=find_packages(include=['nestling_app', 'nestling_app.*']),
     include_package_data=True,
     install_requires=[
