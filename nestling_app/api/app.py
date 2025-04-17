@@ -316,6 +316,23 @@ def export_graph(n_clicks, figure):
     return dcc.send_bytes(img_bytes, "graph_export.png")
 
 @app.callback(
+    [Output('export-graph-button', 'children'),
+     Output('export-button', 'children'),
+     Output('export-graph-wing-tarsus-button', 'children'),
+     Output('export-wing-tarsus-button', 'children')],
+    Input('selected-language', 'data')
+)
+def update_export_buttons(lang):
+    t = translations[lang]
+    return (
+        t.get('export_graph', '📤 Export Graph'),
+        t.get('export_results', '📥 Export Results'),
+        t.get('export_graph_wing', '📤 Export Graph Wing & Tarsus'),
+        t.get('export_results_wing', '📥 Export Results Wing & Tarsus'),
+    )
+
+
+@app.callback(
     Output("download-graph-wing-tarsus", "data"),
     Input("export-graph-wing-tarsus-button", "n_clicks"),
     State("wing-graph", "figure"),
