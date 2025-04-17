@@ -20,8 +20,12 @@ server = app.server
 app.layout = html.Div([
 
     html.Div([
-        html.Img(src="assets/logo.png",
-                 style={'height': '60px', 'margin-top': '30px', 'margin-left': '20px'}),
+        html.A(
+            html.Img(src="assets/logo.png",
+                     style={'height': '60px', 'margin-top': '30px', 'margin-left': '20px'}),
+            href="https://wildlabs.net",
+            target="_blank"  # Para que se abra en una nueva pestaña
+        ),
         html.Img(src="/assets/nestlings.jpg",
                  style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'})
     ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
