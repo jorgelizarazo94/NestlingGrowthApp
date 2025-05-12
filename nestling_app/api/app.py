@@ -77,6 +77,7 @@ html.Div([
                 id='unit-selector-weight',
                 options=[
                     {'label': 'g', 'value': 'g'},
+                    {'label': 'kg', 'value': 'kg'},
                     {'label': 'lb', 'value': 'lb'},
                     {'label': 'oz', 'value': 'oz'}
                 ],
