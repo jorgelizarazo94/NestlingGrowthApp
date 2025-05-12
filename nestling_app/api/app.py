@@ -72,6 +72,19 @@ html.Div([
             dcc.Dropdown(id='weight-dropdown', placeholder="Select a column for Weight",
                          style={'width': '50%', 'max-width': '400px'}),
 
+            html.Label("Select Y-axis Unit:", style={'margin-left': '20px'}),
+            dcc.Dropdown(
+                id='unit-selector-weight',
+                options=[
+                    {'label': 'g', 'value': 'g'},
+                    {'label': 'lb', 'value': 'lb'},
+                    {'label': 'oz', 'value': 'oz'}
+                ],
+                value='g',
+                clearable=False,
+                style={'width': '150px', 'margin-left': '20px'}
+            ),
+
             html.Br(),
             # Primer botón (Weight Analysis)
             html.Button(id="analyze-weight", n_clicks=0,
@@ -133,6 +146,19 @@ html.Div([
             html.Label(id="label-select-tarsus",
                        style={'fontSize': '16px', 'fontWeight': 'bold', 'color': '#535AA6'}),
             dcc.Dropdown(id='tarsus-dropdown', style={'width': '50%', 'max-width': '400px'}),
+
+            html.Label("Select Y-axis Unit:", style={'margin-left': '20px'}),
+            dcc.Dropdown(
+                id='unit-selector-wing',
+                options=[
+                    {'label': 'mm', 'value': 'mm'},
+                    {'label': 'cm', 'value': 'cm'},
+                    {'label': 'inch', 'value': 'inch'}
+                ],
+                value='mm',
+                clearable=False,
+                style={'width': '150px', 'margin-left': '20px'}
+            ),
 
             html.Button(id="analyze-wing-tarsus", n_clicks=0,
                         style={
@@ -229,9 +255,10 @@ def update_model_results_wing_title(lang):
     Input('analyze-weight', 'n_clicks'),
     [State('day-dropdown-weight', 'value'),
      State('weight-dropdown', 'value'),
-     State('stored-data', 'data')]
+     State('stored-data', 'data'),
+     State('unit-selector-weight', 'value')]
 )
-def analyze_weight(n_clicks, day_col, weight_col, json_data):
+def analyze_weight(n_clicks, day_col, weight_col, json_data, unit):
     if n_clicks == 0 or json_data is None:
         return go.Figure(), []
 
@@ -287,7 +314,7 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
             dtick=tick_spacing,
             title="Days After Hatching"
         ),
-        yaxis_title="Weight",
+        yaxis_title=f"Weight ({unit})",
         template="simple_white",
         font=dict(size=14, color="black"),
         legend=dict(x=0, y=1, bgcolor="rgba(255,255,255,0.5)"),
@@ -408,11 +435,12 @@ def update_model_results_title(lang):
     [State('day-dropdown-wing', 'value'),
      State('wing-dropdown', 'value'),
      State('tarsus-dropdown', 'value'),
-     State('stored-data', 'data')],
+     State('stored-data', 'data'),
+     State('unit-selector-wing', 'value')],
     prevent_initial_call=True
 )
 
-def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
+def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data, unit):
     if json_data is None:
         return go.Figure(), []
 
@@ -492,7 +520,7 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
             dtick=tick_spacing,
             title="Days After Hatching"
         ),
-        yaxis_title="Measurement",
+        yaxis_title=f"Measurement ({unit})",
         template="simple_white",
         font=dict(size=14, color="black"),
         legend=dict(x=0.05, y=0.95, bgcolor="rgba(255,255,255,0.5)")
