@@ -281,8 +281,12 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data):
     tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
 
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=tick_spacing),
-        xaxis_title="Days After Hatching",
+        xaxis=dict(
+            range=[x_data.min(), x_data.max()],  # eje X exacto sin margen
+            tickmode='linear',
+            dtick=tick_spacing,
+            title="Days After Hatching"
+        ),
         yaxis_title="Weight",
         template="simple_white",
         font=dict(size=14, color="black"),
@@ -482,7 +486,12 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data):
     tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
 
     fig.update_layout(
-        xaxis=dict(tickmode='linear', dtick=tick_spacing, title="Days After Hatching"),
+        xaxis=dict(
+            range=[x_data.min(), x_data.max()],  # 🚨 aquí obligamos el eje X exacto sin margen
+            tickmode='linear',
+            dtick=tick_spacing,
+            title="Days After Hatching"
+        ),
         yaxis_title="Measurement",
         template="simple_white",
         font=dict(size=14, color="black"),
