@@ -1,15 +1,22 @@
-Metadata-Version: 2.1
-Name: nestling-growth-app
+Metadata-Version: 2.4
+Name: nestling_growth_app
 Version: 0.1.9
 Summary: An interactive Dash app to analyze nestling growth using biological models
 Home-page: https://github.com/jorgelizarazo94/NestlingGrowthApp
 Author: Jorge Lizarazo, Juan Camilo Guerra & Gustavo A Londoño
 Author-email: jorge.lizarazo.b@gmail.com
+License: MIT
+Project-URL: Homepage, https://github.com/jorgelizarazo94/NestlingGrowthApp
+Project-URL: PyPI, https://pypi.org/project/nestling-growth-app/
+Project-URL: Issue Tracker, https://github.com/jorgelizarazo94/NestlingGrowthApp/issues
+Project-URL: DOI, https://doi.org/10.5281/zenodo.17360999
+Keywords: ornithology,growth models,dash,ecology,biology
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Science/Research
 Classifier: Topic :: Scientific/Engineering :: Visualization
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Framework :: Dash
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
@@ -23,6 +30,18 @@ Requires-Dist: fastapi
 Requires-Dist: uvicorn
 Requires-Dist: kaleido
 Requires-Dist: gunicorn
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: project-url
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/jorgelizarazo94/NestlingGrowthApp/7a9916a809009ea6359db6b8e02645db32c0a28d/nestling_app/api/assets/ngapp_log.png" alt="Nestling Growth App" width="200px">
