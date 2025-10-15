@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Nestling Growth App"
+version: "0.1.9"
+doi: 10.5281/zenodo.17360999
+authors:
+  - family-names: "Lizarazo"
+    given-names: "Jorge Eduardo"
+    affiliation: "Western University, London, ON, Canada"
+    orcid: "https://orcid.org/0000-0002-9079-1058"
+  - family-names: "Guerra-Tabares"
+    given-names: "Juan Camilo"
+    affiliation: "Universidad Icesi, Cali, Colombia"
+    orcid: "https://orcid.org/0009-0004-0756-9248"
+  - family-names: "Londoño"
+    given-names: "Gustavo A."
+    affiliation: "Universidad Icesi, Cali, Colombia"
+    orcid: "https://orcid.org/0000-0003-1896-8653"
+date-released: "2025-10-15"
+repository-code: "https://github.com/jorgelizarazo94/NestlingGrowthApp"
+license: "MIT"
+keywords:
+  - Dash
+  - Python
+  - Ornithology
+  - Growth models
+  - Ecology
+  - Nestlings
