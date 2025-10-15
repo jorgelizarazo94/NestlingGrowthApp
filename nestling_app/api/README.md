@@ -1,6 +1,10 @@
 ![Nestling Growth App](https://github.com/jorgelizarazo94/NestlingGrowthApp/blob/master/Nestling_App/api/assets/Logo.png)
 
     Nestling Growth Analyzer 🐣📈
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17360999.svg)](https://doi.org/10.5281/zenodo.17360999)
+
+An interactive Dash app to analyze nestling growth using biological models.
   
 
 The Nestling Growth Analyzer is an 
@@ -35,3 +39,12 @@ Export Results: Easily download generated graphs and results tables for further 
 Python 3.10 or higher
 
 Dependencies listed in requirements.txt
+
+
+## 📚 Citation
+
+If you use **Nestling Growth App**, please cite:
+
+Lizarazo, J., Guerra-Tabares, J.C., & Londoño, G.A. (2025).  
+*Nestling Growth App (v0.1.9)* [Computer software]. Zenodo.  
+https://doi.org/10.5281/zenodo.17360999
