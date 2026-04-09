@@ -7,44 +7,65 @@ from nestling_app.api.translations import translations
 import kaleido
 import plotly.graph_objects as go
 import numpy as np
+import webbrowser
+import threading
 #from models.growth_models import fit_models, logistic, gompertz, richards, von_bertalanffy, evf
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from models.growth_models import fit_models, logistic, gompertz, richards, von_bertalanffy, evf
+from nestling_app.models.growth_models import fit_models, logistic, gompertz, richards, von_bertalanffy, evf
 
-app = dash.Dash(__name__)
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+app = dash.Dash(
+    __name__,
+    assets_folder=resource_path("assets"),
+    suppress_callback_exceptions=True
+)
 server = app.server
 
 app.layout = html.Div([
 
-    html.Div([
-        html.A(
-            html.Img(src="assets/logo.png",
-                     style={'height': '60px', 'margin-top': '30px', 'margin-left': '20px'}),
-            href="https://wildlabs.net",
-            target="_blank"  # Para que se abra en una nueva pestaña
-        ),
-        html.Img(src="/assets/nestlings.jpg",
-                 style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'})
-    ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
+            html.Div([
+                html.A(
+                    html.Img(
+                        src="/assets/logo.png",
+                        style={'height': '60px', 'margin-top': '30px', 'margin-left': '20px'}
+                    ),
+                    href="https://wildlabs.net",
+                    target="_blank"
+                ),
+                html.Img(
+                    src="/assets/nestlings.jpg",
+                    style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'}
+                )
+            ], style={
+                'display': 'flex',
+                'justifyContent': 'space-between',
+                'alignItems': 'center'
+            }),
 
-html.Div([
-    html.Label("🌍 Language / Idioma / Língua:", style={'margin-left': '20px'}),
-    dcc.Dropdown(
-        id='language-selector',
-        options=[
-            {'label': '🇬🇧 English', 'value': 'en'},
-            {'label': '🇪🇸 Español', 'value': 'es'},
-            {'label': '🇵🇹 Português', 'value': 'pt'}
-        ],
-        value='es',
-        clearable=False,
-        style={'width': '200px', 'margin': '10px 0 30px 20px'}
-    ),
-    dcc.Store(id='selected-language', data='es')
-]),
+        html.Div([
+            html.Label("🌍 Language / Idioma / Língua:", style={'margin-left': '20px'}),
+            dcc.Dropdown(
+                id='language-selector',
+                options=[
+                    {'label': '🇬🇧 English', 'value': 'en'},
+                    {'label': '🇪🇸 Español', 'value': 'es'},
+                    {'label': '🇵🇹 Português', 'value': 'pt'}
+                ],
+                value='es',
+                clearable=False,
+                style={'width': '200px', 'margin': '10px 0 30px 20px'}
+            ),
+            dcc.Store(id='selected-language', data='es')
+        ]),
 
     dcc.Upload(
         id='upload-data',
@@ -555,7 +576,11 @@ def update_dropdown_labels(lang):
     )
 
 
+def open_browser():
+    webbrowser.open_new("http://127.0.0.1:8050")
+
 def main():
+    threading.Timer(1, open_browser).start()
     try:
         app.run(debug=False)
     except AttributeError:

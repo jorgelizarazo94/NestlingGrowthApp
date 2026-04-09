@@ -5,7 +5,17 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17360999.svg)](https://doi.org/10.5281/zenodo.17360999)
 
 An interactive Dash app to analyze nestling growth using biological models.
-  
+  ## **Download (No installation required)**
+
+Run the standalone version without installing Python:
+
+👉 **[Download Windows App (.exe)](https://github.com/jorgelizarazo94/NestlingGrowthApp/releases/latest)**
+
+Instructions:
+1. Download the ZIP file
+2. Extract it
+3. Double-click the `.exe` file
+4. The app will open automatically in your browser
 
 The Nestling Growth Analyzer is an 
 interactive Dash web application designed
@@ -48,3 +58,15 @@ If you use **Nestling Growth App**, please cite:
 Lizarazo, J., Guerra-Tabares, J.C., & Londoño, G.A. (2025).  
 *Nestling Growth App (v0.1.9)* [Computer software]. Zenodo.  
 https://doi.org/10.5281/zenodo.17360999
+
+
+## 🌐 Available Versions
+
+- **Python package (advanced users):**  
+  `pip install nestling-growth-app`
+
+- **Standalone application (no coding required):**  
+  👉 [Download here](https://github.com/jorgelizarazo94/NestlingGrowthApp/releases/latest)
+
+- 📄 **Citable version (Zenodo DOI):**  
+  👉 https://doi.org/10.5281/zenodo.17360999
