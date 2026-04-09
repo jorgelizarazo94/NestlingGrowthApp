@@ -5,6 +5,8 @@
 # 🐣 Nestling Growth App
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17360999.svg)](https://doi.org/10.5281/zenodo.17360999)
 
+#  Standalone Version (No installation required)
+Download the executable version:
 👉 **[Download Windows App (.exe)](https://github.com/jorgelizarazo94/NestlingGrowthApp/releases/latest)**
 
 Instructions:
@@ -12,7 +14,7 @@ Instructions:
 2. Extract it
 3. Double-click the `.exe` file
 4. The app will open automatically in your browser
-  
+-------------------------------------------------------------
 The Nestling Growth App is a web-based tool designed for ornithologists, ecologists, and researchers working on nestling development. It allows users to visualize and model growth metrics such as weight, wing, and tarsus length using classic biological growth functions:
 - Logistic  
 - Gompertz  

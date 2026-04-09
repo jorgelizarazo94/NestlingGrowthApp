@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='nestling_growth_app',          # en PyPI se muestra como nestling-growth-app
-    version='0.1.10',                     # debe coincidir con tu release v0.1.9
+    version='0.2.0',                     # debe coincidir
     packages=find_packages(include=['nestling_app', 'nestling_app.*']),
     include_package_data=True,
     install_requires=[
