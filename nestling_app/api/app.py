@@ -187,7 +187,11 @@ app.layout = html.Div([
                         html.Img(
                             src="/assets/sage_avian.svg",
                             alt="Sage Avian Biology",
-                            style={'height': '58px', 'maxWidth': '260px'}
+                            style={
+                                'height': '140px',
+                                'width': '460px',
+                                'objectFit': 'contain'
+                            }
                         ),
                         href="https://journals.sagepub.com/home/avb",
                         target="_blank",
