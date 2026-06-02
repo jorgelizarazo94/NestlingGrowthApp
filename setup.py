@@ -10,6 +10,9 @@ setup(
     version='0.2.0',                     # debe coincidir
     packages=find_packages(include=['nestling_app', 'nestling_app.*']),
     include_package_data=True,
+    package_data={
+        'nestling_app.api': ['assets/*'],
+    },
     install_requires=[
         'dash',
         'pandas',

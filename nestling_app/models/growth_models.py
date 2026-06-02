@@ -23,21 +23,53 @@ def evf(x, a, b, c, d):
     return a * np.exp(-b * np.exp(-c * x)) * (1 - np.exp(-d * x))
 
 
-# 📌 AIC and BIC Calculation
-def calculate_aic_bic(y_true, y_pred, params):
+# 📌 Information criteria calculation
+INFORMATION_CRITERIA = {
+    "AIC": "AIC",
+    "AICC": "AICc",
+}
+
+
+def normalize_information_criterion(criterion):
+    if not isinstance(criterion, str):
+        raise ValueError("Unknown information criterion. Expected one of: AIC, AICc.")
+
+    normalized = INFORMATION_CRITERIA.get(criterion.upper())
+    if normalized is None:
+        raise ValueError(f"Unknown information criterion '{criterion}'. Expected one of: AIC, AICc.")
+
+    return normalized
+
+
+def calculate_information_criteria(y_true, y_pred, params):
     n = len(y_true)
     residuals = y_true - y_pred
     sse = np.sum(residuals ** 2)
     k = len(params)
 
     aic = n * np.log(sse / n) + 2 * k
+    aicc = np.inf
+    if n > k + 1:
+        aicc = aic + (2 * k * (k + 1)) / (n - k - 1)
     bic = n * np.log(sse / n) + k * np.log(n)
 
+    return aic, aicc, bic
+
+
+def calculate_aic_bic(y_true, y_pred, params):
+    aic, _, bic = calculate_information_criteria(y_true, y_pred, params)
     return aic, bic
 
 
 # 📌 Fit Models and Evaluate
-def fit_models(x_data, y_data):
+def fit_models(x_data, y_data, criterion="AIC"):
+    criterion = normalize_information_criterion(criterion)
+    score_index = {
+        "AIC": 2,
+        "AICc": 3,
+    }[criterion]
+    delta_label = f"Δ{criterion}"
+
     models = {
         "Logistic": (logistic, [max(y_data), 1, np.median(x_data)]),
         "Gompertz": (gompertz, [max(y_data), 1, 0.1]),
@@ -54,7 +86,7 @@ def fit_models(x_data, y_data):
             print(f"🔍 Trying model: {model_name}")
             popt, _ = curve_fit(model_func, x_data, y_data, p0=initial_params, maxfev=10000)
             y_pred = model_func(x_data, *popt)
-            aic, bic = calculate_aic_bic(y_data, y_pred, popt)
+            aic, aicc, bic = calculate_information_criteria(y_data, y_pred, popt)
 
             # Growth rate and inflection point
             if model_name == "Logistic":
@@ -70,8 +102,8 @@ def fit_models(x_data, y_data):
             else:
                 k_value, T_value = None, None
 
-            results.append((model_name, popt, aic, bic, k_value, T_value))
-            print(f"✅ Success: {model_name} — AIC: {aic:.2f}, k: {k_value:.4f}, T: {T_value:.2f}")
+            results.append((model_name, popt, aic, aicc, bic, k_value, T_value))
+            print(f"✅ Success: {model_name} — {criterion}: {results[-1][score_index]:.2f}, k: {k_value:.4f}, T: {T_value:.2f}")
 
         except Exception as e:
             print(f"❌ Error with {model_name}: {e}")
@@ -80,9 +112,18 @@ def fit_models(x_data, y_data):
         print("🚫 No models could be fitted.")
         return None, None
 
-    results.sort(key=lambda x: x[2])
-    best_aic = results[0][2]
-    results = [(m, p, aic, bic, k, T, aic - best_aic) for (m, p, aic, bic, k, T) in results]
+    results.sort(key=lambda x: x[score_index])
+    best_score = results[0][score_index]
+    scored_results = []
+    for m, p, aic, aicc, bic, k, T in results:
+        selected_score = {
+            "AIC": aic,
+            "AICc": aicc,
+        }[criterion]
+        delta = selected_score - best_score if np.isfinite(best_score) else np.inf
+        scored_results.append((m, p, aic, aicc, bic, k, T, delta))
+    results = scored_results
 
-    print(f"🏆 Best model: {results[0][0]} with ΔAIC = 0.0")
+    best_delta = 0.0 if np.isfinite(best_score) else np.inf
+    print(f"🏆 Best model: {results[0][0]} with {delta_label} = {best_delta:.1f}")
     return results[0], results

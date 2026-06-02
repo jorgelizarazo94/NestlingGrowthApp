@@ -17,10 +17,10 @@ import os
 from nestling_app.models.growth_models import fit_models, logistic, gompertz, richards, von_bertalanffy, evf
 
 def resource_path(relative_path):
-    try:
+    if hasattr(sys, "_MEIPASS"):
         base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
 
 app = dash.Dash(
@@ -29,6 +29,144 @@ app = dash.Dash(
     suppress_callback_exceptions=True
 )
 server = app.server
+
+
+def normalize_criterion(criterion):
+    return "AICc" if str(criterion or "AIC").upper() == "AICC" else "AIC"
+
+
+def delta_column_name(criterion):
+    return "ΔAICc" if normalize_criterion(criterion) == "AICc" else "ΔAIC"
+
+
+def finite_float(value):
+    try:
+        numeric_value = float(value)
+    except (TypeError, ValueError):
+        return None
+    return numeric_value if np.isfinite(numeric_value) else None
+
+
+def calculate_aicc(aic, params, sample_size):
+    aic_value = finite_float(aic)
+    if aic_value is None:
+        return None
+
+    parameter_count = len(params)
+    denominator = sample_size - parameter_count - 1
+    if denominator <= 0:
+        return None
+
+    return finite_float(
+        aic_value + (2 * parameter_count * (parameter_count + 1)) / denominator
+    )
+
+
+def format_table_value(value):
+    numeric_value = finite_float(value)
+    return round(numeric_value, 4) if numeric_value is not None else "N/A"
+
+
+def annotated_results(results, sample_size):
+    annotations = []
+    for result in results or []:
+        if len(result) >= 8:
+            model_name, params, aic, aicc, bic, k_value, t_value, _ = result[:8]
+        else:
+            model_name, params, aic, bic, k_value, t_value, _ = result
+            aicc = calculate_aicc(aic, params, sample_size)
+        annotations.append({
+            "result": result,
+            "Modelo": model_name,
+            "Parámetros": str(params),
+            "AIC": finite_float(aic),
+            "AICc": finite_float(aicc),
+            "BIC": finite_float(bic),
+            "k": finite_float(k_value),
+            "T": finite_float(t_value),
+        })
+    return annotations
+
+
+def results_dataframe(results, criterion, sample_size, variable=None):
+    annotations = annotated_results(results, sample_size)
+    if not annotations:
+        return pd.DataFrame()
+
+    best_aic = min(
+        (result["AIC"] for result in annotations if result["AIC"] is not None),
+        default=None
+    )
+    best_aicc = min(
+        (result["AICc"] for result in annotations if result["AICc"] is not None),
+        default=None
+    )
+
+    metric = normalize_criterion(criterion)
+    annotations.sort(
+        key=lambda result: result[metric]
+        if result[metric] is not None
+        else float("inf")
+    )
+
+    records = []
+    for result in annotations:
+        delta_aic = (
+            result["AIC"] - best_aic
+            if result["AIC"] is not None and best_aic is not None
+            else None
+        )
+        delta_aicc = (
+            result["AICc"] - best_aicc
+            if result["AICc"] is not None and best_aicc is not None
+            else None
+        )
+
+        record = {
+            "Modelo": result["Modelo"],
+            "Parámetros": result["Parámetros"],
+            "AIC": format_table_value(result["AIC"]),
+            "AICc": format_table_value(result["AICc"]),
+            "BIC": format_table_value(result["BIC"]),
+            "k": format_table_value(result["k"]),
+            "T": format_table_value(result["T"]),
+            "ΔAIC": format_table_value(delta_aic),
+            "ΔAICc": format_table_value(delta_aicc),
+        }
+        if variable is not None:
+            record["Variable"] = variable
+        records.append(record)
+
+    return pd.DataFrame(records)
+
+
+def model_table_columns(lang, criterion, include_variable=False):
+    t = translations.get(lang, translations["en"])
+    delta_col = delta_column_name(criterion)
+    columns = [
+        {"name": t.get("model_column", "Model"), "id": "Modelo"},
+        {"name": t.get("parameters_column", "Parameters"), "id": "Parámetros"},
+        {"name": "AIC", "id": "AIC"},
+        {"name": "AICc", "id": "AICc"},
+        {"name": "BIC", "id": "BIC"},
+        {"name": "k", "id": "k"},
+        {"name": "T", "id": "T"},
+        {"name": delta_col, "id": delta_col},
+    ]
+    if include_variable:
+        columns.append({"name": t.get("variable_column", "Variable"), "id": "Variable"})
+    return columns
+
+
+def records_for_columns(records, columns):
+    if not records or not columns:
+        return records
+    column_ids = [column["id"] for column in columns if column.get("id")]
+    return [
+        {column_id: record.get(column_id) for column_id in column_ids}
+        for record in records
+    ]
+
 
 app.layout = html.Div([
 
@@ -41,6 +179,21 @@ app.layout = html.Div([
                     href="https://wildlabs.net",
                     target="_blank"
                 ),
+                html.Div([
+                    html.Div(id="published-in-label",
+                             style={'fontSize': '14px', 'fontWeight': 'bold', 'color': '#535AA6',
+                                    'textAlign': 'center', 'marginBottom': '4px'}),
+                    html.A(
+                        html.Img(
+                            src="/assets/sage_avian.svg",
+                            alt="Sage Avian Biology",
+                            style={'height': '58px', 'maxWidth': '260px'}
+                        ),
+                        href="https://journals.sagepub.com/home/avb",
+                        target="_blank",
+                        rel="noopener noreferrer"
+                    )
+                ], style={'textAlign': 'center', 'marginTop': '24px'}),
                 html.Img(
                     src="/assets/nestlings.jpg",
                     style={'height': '110px', 'margin-top': '30px', 'margin-right': '20px'}
@@ -52,7 +205,7 @@ app.layout = html.Div([
             }),
 
         html.Div([
-            html.Label("🌍 Language / Idioma / Língua:", style={'margin-left': '20px'}),
+            html.Label(id="language-selector-label", style={'margin-left': '20px'}),
             dcc.Dropdown(
                 id='language-selector',
                 options=[
@@ -63,6 +216,17 @@ app.layout = html.Div([
                 value='es',
                 clearable=False,
                 style={'width': '200px', 'margin': '10px 0 30px 20px'}
+            ),
+            html.Label(id="label-information-criterion", style={'margin-left': '20px'}),
+            dcc.Dropdown(
+                id='criterion-selector',
+                options=[
+                    {'label': 'AIC', 'value': 'AIC'},
+                    {'label': 'AICc (muestra pequeña)', 'value': 'AICc'}
+                ],
+                value='AIC',
+                clearable=False,
+                style={'width': '240px', 'margin': '10px 0 30px 20px'}
             ),
             dcc.Store(id='selected-language', data='es')
         ]),
@@ -132,15 +296,7 @@ app.layout = html.Div([
 
             dash_table.DataTable(
                 id='model-results-table',
-                columns=[
-                    {"name": "Modelo", "id": "Modelo"},
-                    {"name": "Parámetros", "id": "Parámetros"},
-                    {"name": "AIC", "id": "AIC"},
-                    {"name": "BIC", "id": "BIC"},
-                    {"name": "k", "id": "k"},
-                    {"name": "T", "id": "T"},
-                    {"name": "ΔAIC", "id": "ΔAIC"}
-                ],
+                columns=model_table_columns('es', 'AIC'),
                 style_table={'overflowX': 'auto'},
                 style_header={'backgroundColor': '#535AA6', 'color': 'white', 'fontWeight': 'bold'},
                 style_cell={'textAlign': 'center'},
@@ -203,16 +359,7 @@ app.layout = html.Div([
 
             dash_table.DataTable(
                 id='model-results-table-wing-tarsus',
-                columns=[
-                    {"name": "Modelo", "id": "Modelo"},
-                    {"name": "Parámetros", "id": "Parámetros"},
-                    {"name": "AIC", "id": "AIC"},
-                    {"name": "BIC", "id": "BIC"},
-                    {"name": "k", "id": "k"},
-                    {"name": "T", "id": "T"},
-                    {"name": "ΔAIC", "id": "ΔAIC"},
-                    {"name": "Variable", "id": "Variable"},
-                ],
+                columns=model_table_columns('es', 'AIC', include_variable=True),
                 style_table={'overflowX': 'auto'},
                 style_header={'backgroundColor': '#535AA6', 'color': 'white', 'fontWeight': 'bold'},
                 style_cell={'textAlign': 'center'},
@@ -269,19 +416,46 @@ def update_model_results_wing_title(lang):
     t = translations[lang]
     return t.get('model_results_wing', 'Model Results Wing & Tarsus')
 
+
+@app.callback(
+    [Output('language-selector-label', 'children'),
+     Output('label-information-criterion', 'children'),
+     Output('criterion-selector', 'options'),
+     Output('published-in-label', 'children'),
+     Output('model-results-table', 'columns'),
+     Output('model-results-table-wing-tarsus', 'columns')],
+    [Input('selected-language', 'data'),
+     Input('criterion-selector', 'value')]
+)
+def update_criterion_and_publication_labels(lang, criterion):
+    t = translations.get(lang, translations["en"])
+    return (
+        t.get('language_label', '🌍 Language / Idioma / Língua:'),
+        t.get('information_criterion', 'Information criterion'),
+        [
+            {'label': t.get('aic_option', 'AIC'), 'value': 'AIC'},
+            {'label': t.get('aicc_option', 'AICc (small sample)'), 'value': 'AICc'},
+        ],
+        t.get('published_in', 'published in'),
+        model_table_columns(lang, criterion),
+        model_table_columns(lang, criterion, include_variable=True),
+    )
+
+
 # Callback para análisis de peso #d
 # Callback para peso con tabla incluida y formato original
 @app.callback(
     [Output('weight-graph', 'figure'),
      Output('model-results-table', 'data')],
-    Input('analyze-weight', 'n_clicks'),
+    [Input('analyze-weight', 'n_clicks'),
+     Input('criterion-selector', 'value')],
     [State('day-dropdown-weight', 'value'),
      State('weight-dropdown', 'value'),
      State('stored-data', 'data'),
      State('unit-selector-weight', 'value')]
 )
-def analyze_weight(n_clicks, day_col, weight_col, json_data, unit):
-    if n_clicks == 0 or json_data is None:
+def analyze_weight(n_clicks, criterion, day_col, weight_col, json_data, unit):
+    if n_clicks == 0 or json_data is None or not day_col or not weight_col:
         return go.Figure(), []
 
     df = pd.read_json(json_data, orient='split')
@@ -298,12 +472,11 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data, unit):
         print(f"⚠️ No hay suficientes datos. Solo {len(df_clean)} filas.")
         return go.Figure(), []
 
-    best_model, results = fit_models(x_data, y_data)
-
+    best_model, results = fit_models(x_data, y_data, criterion=criterion)
     if best_model is None:
         return go.Figure(), []
 
-    model_name, best_params, _, _, _, _, _ = best_model
+    model_name, best_params, *_ = best_model
     model_func = {
         "Logistic": logistic,
         "Gompertz": gompertz,
@@ -343,8 +516,7 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data, unit):
         showlegend=True
     )
 
-    results_df = pd.DataFrame(results, columns=["Modelo", "Parámetros", "AIC", "BIC", "k", "T", "ΔAIC"])
-    results_df["Parámetros"] = results_df["Parámetros"].astype(str)
+    results_df = results_dataframe(results, criterion, len(df_clean))
 
     return fig, results_df.to_dict('records')
 
@@ -352,12 +524,13 @@ def analyze_weight(n_clicks, day_col, weight_col, json_data, unit):
     Output("download-dataframe-csv", "data"),
     Input("export-button", "n_clicks"),
     State("model-results-table", "data"),
+    State("model-results-table", "columns"),
     prevent_initial_call=True
 )
-def export_results(n_clicks, table_data):
+def export_results(n_clicks, table_data, columns):
     if not table_data:
         return dash.no_update
-    results_df = pd.DataFrame(table_data)
+    results_df = pd.DataFrame(records_for_columns(table_data, columns))
     return dcc.send_data_frame(results_df.to_csv, "model_results.csv", index=False)
 
 @app.callback(
@@ -416,12 +589,13 @@ def update_tab_labels(lang):
     Output("download-wing-tarsus-csv", "data"),
     Input("export-wing-tarsus-button", "n_clicks"), # ✅ Corregido
     State("model-results-table-wing-tarsus", "data"),
+    State("model-results-table-wing-tarsus", "columns"),
     prevent_initial_call=True
 )
-def export_wing_tarsus_results(n_clicks, data):
+def export_wing_tarsus_results(n_clicks, data, columns):
     if not data:
         return dash.no_update
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(records_for_columns(data, columns))
     return dcc.send_data_frame(df.to_csv, "wing_tarsus_results.csv", index=False)
 
 
@@ -453,7 +627,8 @@ def update_model_results_title(lang):
 @app.callback(
     [Output('wing-graph', 'figure'),
      Output('model-results-table-wing-tarsus', 'data')],
-    Input('analyze-wing-tarsus', 'n_clicks'),
+    [Input('analyze-wing-tarsus', 'n_clicks'),
+     Input('criterion-selector', 'value')],
     [State('day-dropdown-wing', 'value'),
      State('wing-dropdown', 'value'),
      State('tarsus-dropdown', 'value'),
@@ -462,12 +637,14 @@ def update_model_results_title(lang):
     prevent_initial_call=True
 )
 
-def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data, unit):
-    if json_data is None:
+def analyze_wing_tarsus(n_clicks, criterion, day_col, wing_col, tarsus_col, json_data, unit):
+    if n_clicks == 0 or json_data is None or not day_col or not wing_col or not tarsus_col:
         return go.Figure(), []
 
     df = pd.read_json(json_data, orient='split')
     df_clean = df[[day_col, wing_col, tarsus_col]].dropna()
+    if df_clean.empty:
+        return go.Figure(), []
 
     x_data = df_clean[day_col]
     x_fit = np.linspace(x_data.min(), x_data.max(), 30)  # puedes reducir de 100 a 80
@@ -477,9 +654,9 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data, unit
 
     # Ala
     y_wing = df_clean[wing_col]
-    best_model_wing, results_wing = fit_models(x_data, y_wing)
+    best_model_wing, results_wing = fit_models(x_data, y_wing, criterion=criterion)
     if best_model_wing:
-        model_name_w, params_w, _, _, _, _, _ = best_model_wing
+        model_name_w, params_w, *_ = best_model_wing
         model_func_w = {
             "Logistic": logistic, "Gompertz": gompertz, "Richards": richards,
             "Von Bertalanffy": von_bertalanffy, "Extreme Value Function": evf
@@ -500,12 +677,13 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data, unit
             name=f'Wing Fit ({model_name_w})'
         ))
 
-        df_wing = pd.DataFrame(results_wing, columns=["Modelo", "Parámetros", "AIC", "BIC", "k", "T", "ΔAIC"])
-        df_wing['Variable'] = 'Wing'
+        combined_results.append(
+            results_dataframe(results_wing, criterion, len(df_clean), variable='Wing')
+        )
 
     # Tarso
     y_tarsus = df_clean[tarsus_col]
-    best_model_tarsus, results_tarsus = fit_models(x_data, y_tarsus)
+    best_model_tarsus, results_tarsus = fit_models(x_data, y_tarsus, criterion=criterion)
     if best_model_tarsus:
         model_name_t, params_t, *_ = best_model_tarsus
         model_func_t = {
@@ -526,11 +704,14 @@ def analyze_wing_tarsus(n_clicks, day_col, wing_col, tarsus_col, json_data, unit
             name=f'Tarsus Fit ({model_name_t})'
         ))
 
-        df_tarsus = pd.DataFrame(results_tarsus, columns=["Modelo", "Parámetros", "AIC", "BIC", "k", "T", "ΔAIC"])
-        df_tarsus['Variable'] = 'Tarsus'
+        combined_results.append(
+            results_dataframe(results_tarsus, criterion, len(df_clean), variable='Tarsus')
+        )
 
-    combined_results_df = pd.concat([df_wing, df_tarsus], ignore_index=True)
-    combined_results_df["Parámetros"] = combined_results_df["Parámetros"].astype(str)
+    if not combined_results:
+        return fig, []
+
+    combined_results_df = pd.concat(combined_results, ignore_index=True)
 
     # Estilo gráfico final
     tick_spacing = 1 if len(x_data.unique()) <= 12 else int(len(x_data.unique()) // 10)
